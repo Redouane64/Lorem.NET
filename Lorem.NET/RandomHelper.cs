@@ -9,6 +9,7 @@ namespace LoremNET
     public static class RandomHelper
     {
         private static int seedCounter = new Random().Next();
+		private static int? customSeed = null;
 
         [ThreadStatic]
         private static Random rng;
@@ -20,10 +21,12 @@ namespace LoremNET
                 if (rng == null)
                 {
                     int seed = Interlocked.Increment(ref seedCounter);
-                    rng = new Random(seed);
+                    rng = new Random(customSeed ?? seed);
                 }
                 return rng;
             }
         }
+
+		public static void SetCustomSeed(int seed) => customSeed = seed;
     }
 }
